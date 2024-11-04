@@ -7,10 +7,10 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
 
 class Create_notes : AppCompatActivity() {
-    private lateinit var headerEditText: AppCompatEditText
-    private lateinit var dateEditText: AppCompatEditText
-    private lateinit var messageEditText: AppCompatEditText
-    private lateinit var createButton: AppCompatButton
+    private  var headerEditText: AppCompatEditText? = null
+    private  var dateEditText: AppCompatEditText? = null
+    private  var messageEditText: AppCompatEditText? = null
+    private  var createButton: AppCompatButton? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,11 +22,11 @@ class Create_notes : AppCompatActivity() {
         messageEditText = findViewById(R.id.message_cr_n)
         createButton = findViewById(R.id.create)
 
-        createButton.setOnClickListener {
+        createButton?.setOnClickListener {
 
-            val header = headerEditText.text.toString()
-            val date = dateEditText.text.toString()
-            val message = messageEditText.text.toString()
+            val header = headerEditText?.text.toString()
+            val date = dateEditText?.text.toString()
+            val message = messageEditText?.text.toString()
 
 
             val intent = Intent().apply {
