@@ -10,10 +10,10 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
 
-class Logic_myNotes_adapter(
+class LogicMyNotesAdapter(
     private val list: MutableList<Notes.UserNotes>,
     private val onDelete: (Int) -> Unit
-) : RecyclerView.Adapter<Logic_myNotes_adapter.ViewHolder>() {
+) : RecyclerView.Adapter<LogicMyNotesAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val header: AppCompatTextView = itemView.findViewById(R.id.rvni_header)

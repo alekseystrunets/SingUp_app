@@ -16,7 +16,7 @@ class Notes : AppCompatActivity() {
         UserNotes("Third", "third message", "03.05.2024")
     )
 
-    private lateinit var adapter: Logic_myNotes_adapter
+    private lateinit var adapter: LogicMyNotesAdapter
     private lateinit var createNoteLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,7 +24,7 @@ class Notes : AppCompatActivity() {
         setContentView(R.layout.activity_notes)
 
         val recyclerView = findViewById<RecyclerView>(R.id.recycle_view)
-        adapter = Logic_myNotes_adapter(listOfNotesUsers) { position ->
+        adapter = LogicMyNotesAdapter(listOfNotesUsers) { position ->
             deleteNoteAt(position)
         }
         recyclerView.adapter = adapter
