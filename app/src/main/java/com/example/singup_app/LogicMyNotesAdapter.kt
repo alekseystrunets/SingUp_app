@@ -11,7 +11,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
 
 class LogicMyNotesAdapter(
-    private val list: MutableList<Notes.UserNotes>,
+    private val list: MutableList<UserNotes>,
     private val onDelete: (Int) -> Unit
 ) : RecyclerView.Adapter<LogicMyNotesAdapter.ViewHolder>() {
 
