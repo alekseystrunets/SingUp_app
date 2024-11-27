@@ -1,4 +1,4 @@
-package com.example.singup_app
+package com.example.singup_app.presentation.view.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,17 +7,17 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.example.singup_app.R
 
 class UserAccountFragment : Fragment() {
 
-    private lateinit var userEmailTextView: TextView
-    private lateinit var userLoginTextView: TextView
-    private lateinit var buttonToNotes: Button
+    private  var userEmailTextView: TextView? = null
+    private  var userLoginTextView: TextView? = null
+    private  var buttonToNotes: Button? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val currentView = inflater.inflate(R.layout.fragment_account_user, container, false)
-
         userEmailTextView = currentView.findViewById(R.id.user_account_email1)
         userLoginTextView = currentView.findViewById(R.id.user_account_login)
         buttonToNotes = currentView.findViewById(R.id.button_to_notes)
@@ -27,10 +27,10 @@ class UserAccountFragment : Fragment() {
         val login = arguments?.getString("login")
 
         // Устанавливаем полученные данные в TextView
-        userEmailTextView.text = email
-        userLoginTextView.text = login
+        userEmailTextView?.text = email
+        userLoginTextView?.text = login
 
-        buttonToNotes.setOnClickListener {
+        buttonToNotes?.setOnClickListener {
             openUserNotes()
         }
 

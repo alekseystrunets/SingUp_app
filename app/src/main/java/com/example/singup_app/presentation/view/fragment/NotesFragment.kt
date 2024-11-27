@@ -1,4 +1,4 @@
-package com.example.singup_app
+package com.example.singup_app.presentation.view.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,12 +8,15 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.singup_app.presentation.view.adapter.LogicMyNotesAdapter
+import com.example.singup_app.R
+import com.example.singup_app.data.UserNotes
 
 class NotesFragment : Fragment() {
 
     private val listOfNotesUsers = mutableListOf<UserNotes>()
     private var adapter: LogicMyNotesAdapter? = null
-    private lateinit var addNoteButton: Button
+    private var addNoteButton: Button? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -24,7 +27,7 @@ class NotesFragment : Fragment() {
         addNoteButton = currentView.findViewById(R.id.add_note_button)
 
         // Обработчик нажатия кнопки "Add Note"
-        addNoteButton.setOnClickListener {
+        addNoteButton?.setOnClickListener {
             val createNotesFragment = CreateNotesFragment()
 
             // Переход на CreateNotesFragment
