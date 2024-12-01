@@ -1,4 +1,4 @@
-package com.example.singup_app
+package com.example.singup_app.presentation.ui.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.singup_app.R
 
 class LoginFragment_Launch : Fragment() {
 
