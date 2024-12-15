@@ -4,15 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.example.singup_app.R
 import com.example.singup_app.presentation.ViewModels.CreateNoteFragmentViewModel
 import com.example.singup_app.presentation.action.CreateNoteFragmentAction
-import com.example.singup_app.presentation.action.NotesFragmentAction
 
 class CreateNotesFragment : Fragment() {
 
@@ -21,13 +21,12 @@ class CreateNotesFragment : Fragment() {
     private var messageEditText: AppCompatEditText? = null
     private var createButton: AppCompatButton? = null
     private var exitButton: AppCompatButton? = null
-    private var viewModel: CreateNoteFragmentViewModel? = null
+    private val viewModel: CreateNoteFragmentViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         val currentView = inflater.inflate(R.layout.fragment_create_note, container, false)
-        viewModel = ViewModelProvider(this).get(CreateNoteFragmentViewModel::class.java)
 
         // Инициализация полей ввода
         headerEditText = currentView.findViewById(R.id.header_cr_n)
@@ -38,46 +37,52 @@ class CreateNotesFragment : Fragment() {
 
         // Обработчик нажатия кнопки "Create"
         createButton?.setOnClickListener {
-            viewModel?.processAction(CreateNoteFragmentAction.CreateNewNoteAction)
+            val header = headerEditText?.text.toString()
+            val date = dateEditText?.text.toString()
+            val message = messageEditText?.text.toString()
+            viewModel.setInputData(header, date, message)
+            viewModel.processAction(CreateNoteFragmentAction.CreateNewNoteAction)
         }
-        viewModel?.action?.observe(viewLifecycleOwner, Observer { action ->
-            when(action) {
-                is CreateNoteFragmentAction.GoToBackAction -> back()
-                CreateNoteFragmentAction.CreateNewNoteAction -> addNote()
+
+        viewModel.state.observe(viewLifecycleOwner, Observer { state ->
+            when {
+                state.create -> addNote()
+                state.back -> back()
+                state.errorMessage != null -> Toast.makeText(requireContext(), state.errorMessage, Toast.LENGTH_SHORT).show()
             }
         })
+
         // Обработчик нажатия кнопки "Exit"
         exitButton?.setOnClickListener {
-            viewModel?.processAction(CreateNoteFragmentAction.GoToBackAction)
+            viewModel.processAction(CreateNoteFragmentAction.GoToBackAction)
         }
 
         return currentView
     }
-    private fun back(){
+
+    private fun back() {
         parentFragmentManager.popBackStack()
     }
-    private fun addNote(){
+
+    private fun addNote() {
         val header = headerEditText?.text.toString()
         val date = dateEditText?.text.toString()
         val message = messageEditText?.text.toString()
 
-        // Проверка на пустые поля (опционально)
-        if (header.isNotEmpty() && date.isNotEmpty() && message.isNotEmpty()) {
-            // Передаем данные во фрагмент NotesFragment
-            val noteBundle = Bundle().apply {
-                putString("header", header)
-                putString("date", date)
-                putString("message", message)
-            }
-
-            val notesFragment = NotesFragment()
-            notesFragment.arguments = noteBundle
-
-            // Переходим на NotesFragment
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_main, notesFragment)
-                .addToBackStack(null)
-                .commit()
+        val noteBundle = Bundle().apply {
+            putString("header", header)
+            putString("date", date)
+            putString("message", message)
         }
+
+        val notesFragment = NotesFragment().apply {
+            arguments = noteBundle
+        }
+
+        // Переходим на NotesFragment
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_main, notesFragment)
+            .addToBackStack(null)
+            .commit()
     }
 }
