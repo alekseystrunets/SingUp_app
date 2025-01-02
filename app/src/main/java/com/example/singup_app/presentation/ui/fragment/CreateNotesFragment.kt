@@ -12,7 +12,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.singup_app.R
 import com.example.singup_app.presentation.ViewModels.CreateNoteFragmentViewModel
 import com.example.singup_app.presentation.action.CreateNoteFragmentAction
-import com.example.singup_app.presentation.action.NotesFragmentAction
 
 class CreateNotesFragment : Fragment() {
 
@@ -38,14 +37,16 @@ class CreateNotesFragment : Fragment() {
 
         // Обработчик нажатия кнопки "Create"
         createButton?.setOnClickListener {
-            viewModel?.processAction(CreateNoteFragmentAction.CreateNewNoteAction)
+            showProgressAndCreateNote() // Показать прогресс-бар
         }
+
         viewModel?.action?.observe(viewLifecycleOwner, Observer { action ->
-            when(action) {
+            when (action) {
                 is CreateNoteFragmentAction.GoToBackAction -> back()
                 CreateNoteFragmentAction.CreateNewNoteAction -> addNote()
             }
         })
+
         // Обработчик нажатия кнопки "Exit"
         exitButton?.setOnClickListener {
             viewModel?.processAction(CreateNoteFragmentAction.GoToBackAction)
@@ -53,31 +54,35 @@ class CreateNotesFragment : Fragment() {
 
         return currentView
     }
-    private fun back(){
-        parentFragmentManager.popBackStack()
+
+    private fun back() {
+        val notesFragment = NotesFragment()
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_main, notesFragment) // Переход на NotesFragment
+            .commit()
     }
-    private fun addNote(){
-        val header = headerEditText?.text.toString()
-        val date = dateEditText?.text.toString()
-        val message = messageEditText?.text.toString()
 
-        // Проверка на пустые поля (опционально)
-        if (header.isNotEmpty() && date.isNotEmpty() && message.isNotEmpty()) {
-            // Передаем данные во фрагмент NotesFragment
-            val noteBundle = Bundle().apply {
-                putString("header", header)
-                putString("date", date)
-                putString("message", message)
+    private fun addNote() {
+        // Здесь можно добавить логику для добавления заметки, если нужно
+    }
+
+    private fun showProgressAndCreateNote() {
+        // Создаем новый фрагмент для прогресса
+        val progressFragment = PrFragment().apply {
+            // Передаем данные во фрагмент, даже если они пустые
+            arguments = Bundle().apply {
+                putString("header", headerEditText?.text.toString())
+                putString("date", dateEditText?.text.toString())
+                putString("message", messageEditText?.text.toString())
             }
-
-            val notesFragment = NotesFragment()
-            notesFragment.arguments = noteBundle
-
-            // Переходим на NotesFragment
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_main, notesFragment)
-                .addToBackStack(null)
-                .commit()
         }
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_main, progressFragment) // Отображаем PrFragment
+            .addToBackStack(null)
+            .commit()
+
+        // Уведомляем ViewModel о создании новой заметки
+        viewModel?.processAction(CreateNoteFragmentAction.CreateNewNoteAction)
     }
 }

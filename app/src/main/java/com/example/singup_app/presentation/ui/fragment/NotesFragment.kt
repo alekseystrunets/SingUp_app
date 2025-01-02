@@ -19,20 +19,19 @@ class NotesFragment : Fragment() {
 
     private val listOfNotesUsers = mutableListOf<UserNotes>()
     private var adapter: LogicMyNotesAdapter? = null
-    private  var addNoteButton: Button? = null
-    private var viewModel:NotesFragmentViewModel? = null
+    private var addNoteButton: Button? = null
+    private var viewModel: NotesFragmentViewModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         val currentView = inflater.inflate(R.layout.fragment_note, container, false)
 
-
         addNoteButton = currentView.findViewById(R.id.add_note_button)
         viewModel = ViewModelProvider(this).get(NotesFragmentViewModel::class.java)
 
         viewModel?.action?.observe(viewLifecycleOwner, Observer { action ->
-            when(action) {
+            when (action) {
                 is NotesFragmentAction.GoToAddNotePageAction -> toNextScreen()
             }
         })
@@ -54,7 +53,7 @@ class NotesFragment : Fragment() {
             }
         }
 
-        // Настройка RecyclerView спросить можно ли здесь сделать mvi
+        // Настройка RecyclerView
         val recyclerView = currentView.findViewById<RecyclerView>(R.id.recycle_view)
         adapter = LogicMyNotesAdapter(listOfNotesUsers) { position -> deleteNoteAt(position) }
         recyclerView.adapter = adapter
@@ -67,7 +66,8 @@ class NotesFragment : Fragment() {
         listOfNotesUsers.removeAt(position)
         adapter?.notifyItemRemoved(position)
     }
-    private fun toNextScreen(){
+
+    private fun toNextScreen() {
         val createNotesFragment = CreateNotesFragment()
         parentFragmentManager.beginTransaction()
             .replace(R.id.fragment_main, createNotesFragment)
