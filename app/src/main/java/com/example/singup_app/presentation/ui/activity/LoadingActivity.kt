@@ -33,7 +33,7 @@ class LoadingActivity : AppCompatActivity() {
     }
 
     private fun goToMainActivity() {
-        val intent = Intent(this, FirstActivity::class.java)
+        val intent = Intent(this, Rest::class.java)
         startActivity(intent)
         finish()
     }

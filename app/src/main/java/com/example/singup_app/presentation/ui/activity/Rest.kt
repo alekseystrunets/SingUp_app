@@ -17,6 +17,7 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
@@ -33,16 +34,22 @@ class Rest : AppCompatActivity() {
         val image = findViewById<AppCompatImageView>(R.id.image)
         val api = retrofit.create(Server::class.java)
 
-        lifecycleScope.launch(Dispatchers.IO) {
-            val currentBody = api.getSomeObject(45)
 
-            Glide.with(this@Rest).load(currentBody.objectId).into(image)
-        }
         buttonClick.setOnClickListener{
             lifecycleScope.launch(Dispatchers.IO) {
-                val responseBody = api.getAllObjects()
-                Log.d("Response","$responseBody")
+                withContext(Dispatchers.IO){
+                    val currentBody = api.getSomeObject(45)
+
+                    withContext(Dispatchers.Main){
+                        Glide.with(this@Rest).load(currentBody.primaryImage).into(image)
+                    }
+                }
             }
+
+//            lifecycleScope.launch(Dispatchers.IO) {
+//                val responseBody = api.getAllObjects()
+//                Log.d("Response","$responseBody")
+//            }
         }
     }
 }
