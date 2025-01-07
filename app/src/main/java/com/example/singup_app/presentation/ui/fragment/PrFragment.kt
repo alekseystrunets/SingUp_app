@@ -7,29 +7,34 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import com.example.singup_app.R
+import com.example.singup_app.databinding.FragmentPrBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class PrFragment : Fragment() {
+
+    private var _binding: FragmentPrBinding? = null
+    private val binding : FragmentPrBinding get() = _binding!!
+
     private val job = Job()
     private val scope = CoroutineScope(Dispatchers.Main + job)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_pr, container, false)
+        _binding = FragmentPrBinding.inflate(layoutInflater)
 
         // Инициализация прогресс-бара
-        val progressBar = view.findViewById<ProgressBar>(R.id.progress_bar)
+        val progressBar = binding.progressBar
 
         // Запускаем корутину для задержки
         scope.launch {
             simulateLoading()
         }
 
-        return view
+        return binding.root
     }
 
     private suspend fun simulateLoading() {

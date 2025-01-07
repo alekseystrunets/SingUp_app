@@ -9,29 +9,25 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.singup_app.R
+import com.example.singup_app.databinding.FragmentLoginBinding
 
 class LoginFragment_Launch : Fragment() {
 
-    private lateinit var userEmail: EditText
-    private lateinit var userPass: EditText
-    private lateinit var userLog: EditText
-    private lateinit var buttonReg: Button
+    private var _binding: FragmentLoginBinding? = null
+    private val binding:FragmentLoginBinding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_login, container, false)
+        _binding = FragmentLoginBinding.inflate(layoutInflater)
+        return binding.root
+//        return inflater.inflate(R.layout.fragment_login, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        userEmail = view.findViewById(R.id.user_email)
-        userPass = view.findViewById(R.id.user_password)
-        userLog = view.findViewById(R.id.user_login)
-        buttonReg = view.findViewById(R.id.login_button)
-
-        buttonReg.setOnClickListener {
+        binding.loginButton.setOnClickListener {
             if (validateInputs()) {
                 openUserAccountFragment()
             }
@@ -39,9 +35,9 @@ class LoginFragment_Launch : Fragment() {
     }
 
     private fun validateInputs(): Boolean {
-        val email = userEmail.text.toString().trim()
-        val password = userPass.text.toString().trim()
-        val login = userLog.text.toString().trim()
+        val email = binding.userEmail.text.toString().trim()
+        val password = binding.userPassword.text.toString().trim()
+        val login = binding.userLogin.text.toString().trim()
 
         return when {
             email.isEmpty() || login.isEmpty() || password.isEmpty() -> {
@@ -70,8 +66,8 @@ class LoginFragment_Launch : Fragment() {
 
         // Подготовка данных для передачи
         val bundle = Bundle()
-        bundle.putString("email", userEmail.text.toString().trim())
-        bundle.putString("login", userLog.text.toString().trim())
+        bundle.putString("email", binding.userEmail.text.toString().trim())
+        bundle.putString("login", binding.userLogin.text.toString().trim())
 
         // Передаем данные через arguments
         fragment.arguments = bundle

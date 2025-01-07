@@ -10,33 +10,25 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.singup_app.R
+import com.example.singup_app.databinding.FragmentCreateNoteBinding
 import com.example.singup_app.presentation.ViewModels.CreateNoteFragmentViewModel
 import com.example.singup_app.presentation.action.CreateNoteFragmentAction
 
 class CreateNotesFragment : Fragment() {
 
-    private var headerEditText: AppCompatEditText? = null
-    private var dateEditText: AppCompatEditText? = null
-    private var messageEditText: AppCompatEditText? = null
-    private var createButton: AppCompatButton? = null
-    private var exitButton: AppCompatButton? = null
+    private var _binding : FragmentCreateNoteBinding? = null
+    private val binding : FragmentCreateNoteBinding get() = _binding!!
+
     private var viewModel: CreateNoteFragmentViewModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        val currentView = inflater.inflate(R.layout.fragment_create_note, container, false)
+        _binding = FragmentCreateNoteBinding.inflate(layoutInflater)
         viewModel = ViewModelProvider(this).get(CreateNoteFragmentViewModel::class.java)
 
-        // Инициализация полей ввода
-        headerEditText = currentView.findViewById(R.id.header_cr_n)
-        dateEditText = currentView.findViewById(R.id.date_cr_n)
-        messageEditText = currentView.findViewById(R.id.message_cr_n)
-        createButton = currentView.findViewById(R.id.create)
-        exitButton = currentView.findViewById(R.id.exit)
-
         // Обработчик нажатия кнопки "Create"
-        createButton?.setOnClickListener {
+        binding.create.setOnClickListener {
             showProgressAndCreateNote() // Показать прогресс-бар
         }
 
@@ -48,11 +40,11 @@ class CreateNotesFragment : Fragment() {
         })
 
         // Обработчик нажатия кнопки "Exit"
-        exitButton?.setOnClickListener {
+        binding.exit.setOnClickListener {
             viewModel?.processAction(CreateNoteFragmentAction.GoToBackAction)
         }
 
-        return currentView
+        return binding.root
     }
 
     private fun back() {
@@ -63,7 +55,7 @@ class CreateNotesFragment : Fragment() {
     }
 
     private fun addNote() {
-        // Здесь можно добавить логику для добавления заметки, если нужно
+
     }
 
     private fun showProgressAndCreateNote() {
@@ -71,14 +63,14 @@ class CreateNotesFragment : Fragment() {
         val progressFragment = PrFragment().apply {
             // Передаем данные во фрагмент, даже если они пустые
             arguments = Bundle().apply {
-                putString("header", headerEditText?.text.toString())
-                putString("date", dateEditText?.text.toString())
-                putString("message", messageEditText?.text.toString())
+                putString("header", binding.headerCrN.text.toString())
+                putString("date", binding.dateCrN.text.toString())
+                putString("message", binding.messageCrN.text.toString())
             }
         }
 
         parentFragmentManager.beginTransaction()
-            .replace(R.id.fragment_main, progressFragment) // Отображаем PrFragment
+            .replace(R.id.fragment_main, progressFragment)
             .addToBackStack(null)
             .commit()
 

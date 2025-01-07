@@ -11,10 +11,14 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.singup_app.R
+import com.example.singup_app.databinding.FragmentAccountUserBinding
 import com.example.singup_app.presentation.ViewModels.UserAccountViewModel
 import com.example.singup_app.presentation.action.UserAccountFragmentAction
 
 class UserAccountFragment : Fragment() {
+
+    private var _binding: FragmentAccountUserBinding? = null
+    private val binding : FragmentAccountUserBinding get() = _binding!!
 
     private  var userEmailTextView: TextView? = null
     private  var userLoginTextView: TextView? = null
@@ -23,11 +27,7 @@ class UserAccountFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val currentView = inflater.inflate(R.layout.fragment_account_user, container, false)
-
-        userEmailTextView = currentView.findViewById(R.id.user_account_email1)
-        userLoginTextView = currentView.findViewById(R.id.user_account_login)
-        buttonToNotes = currentView.findViewById(R.id.button_to_notes)
+        _binding = FragmentAccountUserBinding.inflate(layoutInflater)
 
         viewModel = ViewModelProvider(this).get(UserAccountViewModel::class.java)
 
@@ -36,8 +36,8 @@ class UserAccountFragment : Fragment() {
         val login = arguments?.getString("login")
 
         // Устанавливаем полученные данные в TextView
-        userEmailTextView?.text = email
-        userLoginTextView?.text = login
+        binding.userAccountEmail1.text = email
+        binding.userAccountLogin.text = login
 
         viewModel?.action?.observe(viewLifecycleOwner, Observer { action ->
             when(action) {
@@ -45,11 +45,11 @@ class UserAccountFragment : Fragment() {
             }
         })
 
-        buttonToNotes?.setOnClickListener {
+        binding.buttonToNotes.setOnClickListener {
             viewModel?.processAction(UserAccountFragmentAction.GoToTheNotePageAction)
         }
 
-        return currentView
+        return binding.root
     }
 
     private fun openUserNotes() {

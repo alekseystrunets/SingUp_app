@@ -12,22 +12,24 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.singup_app.R
 import com.example.singup_app.UserNotes
+import com.example.singup_app.databinding.FragmentNoteBinding
 import com.example.singup_app.presentation.ViewModels.NotesFragmentViewModel
 import com.example.singup_app.presentation.action.NotesFragmentAction
 
 class NotesFragment : Fragment() {
 
+    private var _binding : FragmentNoteBinding? = null
+    private val binding : FragmentNoteBinding get() =  _binding!!
+
     private val listOfNotesUsers = mutableListOf<UserNotes>()
     private var adapter: LogicMyNotesAdapter? = null
-    private var addNoteButton: Button? = null
     private var viewModel: NotesFragmentViewModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        val currentView = inflater.inflate(R.layout.fragment_note, container, false)
+        _binding = FragmentNoteBinding.inflate(layoutInflater)
 
-        addNoteButton = currentView.findViewById(R.id.add_note_button)
         viewModel = ViewModelProvider(this).get(NotesFragmentViewModel::class.java)
 
         viewModel?.action?.observe(viewLifecycleOwner, Observer { action ->
@@ -37,7 +39,7 @@ class NotesFragment : Fragment() {
         })
 
         // Обработчик нажатия кнопки "Add Note"
-        addNoteButton?.setOnClickListener {
+        binding.addNoteButton.setOnClickListener {
             viewModel?.processAction(NotesFragmentAction.GoToAddNotePageAction)
         }
 
@@ -54,12 +56,12 @@ class NotesFragment : Fragment() {
         }
 
         // Настройка RecyclerView
-        val recyclerView = currentView.findViewById<RecyclerView>(R.id.recycle_view)
+        val recyclerView = binding.recycleView
         adapter = LogicMyNotesAdapter(listOfNotesUsers) { position -> deleteNoteAt(position) }
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        return currentView
+        return binding.root
     }
 
     private fun deleteNoteAt(position: Int) {
@@ -71,7 +73,7 @@ class NotesFragment : Fragment() {
         val createNotesFragment = CreateNotesFragment()
         parentFragmentManager.beginTransaction()
             .replace(R.id.fragment_main, createNotesFragment)
-            .addToBackStack(null) // Добавляем в back stack, чтобы можно было вернуться назад
+            .addToBackStack(null)
             .commit()
     }
 }

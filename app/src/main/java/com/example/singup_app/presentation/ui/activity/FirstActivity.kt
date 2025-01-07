@@ -4,11 +4,17 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.singup_app.presentation.ui.fragment.LoginFragment_Launch
 import com.example.singup_app.R
+import com.example.singup_app.databinding.ActivityFirstBinding
 
 class FirstActivity : AppCompatActivity() {
+
+    private var _binding : ActivityFirstBinding? = null
+    private val binding : ActivityFirstBinding get() = _binding!!
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_first)
+        _binding = ActivityFirstBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         if (savedInstanceState == null) {
             val fragment = LoginFragment_Launch()
@@ -17,4 +23,9 @@ class FirstActivity : AppCompatActivity() {
                 .commit()
         }
         }
+
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
+    }
     }
