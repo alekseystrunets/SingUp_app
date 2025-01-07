@@ -60,6 +60,7 @@ class LogicMyNotesAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = RecicleViewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
+        //
     }
 
     override fun getItemCount(): Int = list.size
