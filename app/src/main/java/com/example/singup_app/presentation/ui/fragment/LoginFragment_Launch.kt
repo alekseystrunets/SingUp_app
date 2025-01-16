@@ -1,4 +1,4 @@
-package com.example.singup_app
+package com.example.singup_app.presentation.ui.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +8,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.example.singup_app.R
 
 class LoginFragment_Launch : Fragment() {
 
@@ -76,10 +78,7 @@ class LoginFragment_Launch : Fragment() {
         fragment.arguments = bundle
 
         // Переход на UserAccountFragment
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.fragment_main, fragment)
-            .addToBackStack(null)
-            .commit()
+        findNavController().navigate(R.id.action_loginFragment_Launch_to_userAccountFragment, bundle)
     }
 
     private fun isValidEmail(email: String): Boolean {

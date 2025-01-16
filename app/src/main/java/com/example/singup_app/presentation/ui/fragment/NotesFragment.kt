@@ -1,4 +1,4 @@
-package com.example.singup_app
+package com.example.singup_app.presentation.ui.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,32 +6,40 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.singup_app.R
+import com.example.singup_app.UserNotes
+import com.example.singup_app.presentation.ViewModels.NotesFragmentViewModel
+import com.example.singup_app.presentation.action.NotesFragmentAction
 
 class NotesFragment : Fragment() {
 
     private val listOfNotesUsers = mutableListOf<UserNotes>()
     private var adapter: LogicMyNotesAdapter? = null
-    private lateinit var addNoteButton: Button
+    private var addNoteButton: Button? = null
+    private var viewModel: NotesFragmentViewModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         val currentView = inflater.inflate(R.layout.fragment_note, container, false)
 
-        // Инициализация кнопки "Add Note"
         addNoteButton = currentView.findViewById(R.id.add_note_button)
+        viewModel = ViewModelProvider(this).get(NotesFragmentViewModel::class.java)
+
+        viewModel?.action?.observe(viewLifecycleOwner, Observer { action ->
+            when (action) {
+                is NotesFragmentAction.GoToAddNotePageAction -> toNextScreen()
+            }
+        })
 
         // Обработчик нажатия кнопки "Add Note"
-        addNoteButton.setOnClickListener {
-            val createNotesFragment = CreateNotesFragment()
-
-            // Переход на CreateNotesFragment
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_main, createNotesFragment)
-                .addToBackStack(null) // Добавляем в back stack, чтобы можно было вернуться назад
-                .commit()
+        addNoteButton?.setOnClickListener {
+            viewModel?.processAction(NotesFragmentAction.GoToAddNotePageAction)
         }
 
         // Получаем переданные данные (если есть)
@@ -58,5 +66,9 @@ class NotesFragment : Fragment() {
     private fun deleteNoteAt(position: Int) {
         listOfNotesUsers.removeAt(position)
         adapter?.notifyItemRemoved(position)
+    }
+
+    private fun toNextScreen() {
+        findNavController().navigate(R.id.action_notesFragment_to_createNotesFragment)
     }
 }
