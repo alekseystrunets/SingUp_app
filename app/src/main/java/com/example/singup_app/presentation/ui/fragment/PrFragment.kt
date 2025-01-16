@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import androidx.navigation.fragment.findNavController
 import com.example.singup_app.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -49,9 +50,8 @@ class PrFragment : Fragment() {
                 putString("message", message)
             }
         }
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.fragment_main, notesFragment)
-            .commit()
+
+        findNavController().navigate(R.id.action_prFragment_to_notesFragment, notesFragment.arguments)
     }
 
     override fun onDestroy() {

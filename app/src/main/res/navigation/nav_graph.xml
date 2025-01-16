@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/loginFragment_Launch">
+
+    <fragment
+        android:id="@+id/loginFragment_Launch"
+        android:name="com.example.singup_app.presentation.ui.fragment.LoginFragment_Launch"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_Launch_to_userAccountFragment"
+            app:destination="@id/userAccountFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/userAccountFragment"
+        android:name="com.example.singup_app.presentation.ui.fragment.UserAccountFragment"
+        android:label="fragment_account_user"
+        tools:layout="@layout/fragment_account_user" >
+        <action
+            android:id="@+id/action_userAccountFragment_to_notesFragment"
+            app:destination="@id/notesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/notesFragment"
+        android:name="com.example.singup_app.presentation.ui.fragment.NotesFragment"
+        android:label="fragment_note"
+        tools:layout="@layout/fragment_note" >
+        <action
+            android:id="@+id/action_notesFragment_to_createNotesFragment"
+            app:destination="@id/createNotesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createNotesFragment"
+        android:name="com.example.singup_app.presentation.ui.fragment.CreateNotesFragment"
+        android:label="CreateNotesFragment"
+        tools:layout="@layout/fragment_create_note">
+        <action
+            android:id="@+id/action_createNotesFragment_to_prFragment"
+            app:destination="@id/prFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/prFragment"
+        android:name="com.example.singup_app.presentation.ui.fragment.PrFragment"
+        android:label="fragment_pr"
+        tools:layout="@layout/fragment_pr" >
+        <action
+            android:id="@+id/action_prFragment_to_notesFragment"
+            app:destination="@id/notesFragment" />
+    </fragment>
+</navigation>

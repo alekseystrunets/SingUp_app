@@ -8,18 +8,18 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.singup_app.R
 import com.example.singup_app.presentation.ViewModels.UserAccountViewModel
 import com.example.singup_app.presentation.action.UserAccountFragmentAction
 
 class UserAccountFragment : Fragment() {
 
-    private  var userEmailTextView: TextView? = null
-    private  var userLoginTextView: TextView? = null
-    private  var buttonToNotes: Button? = null
-    private var viewModel : UserAccountViewModel? = null
+    private var userEmailTextView: TextView? = null
+    private var userLoginTextView: TextView? = null
+    private var buttonToNotes: Button? = null
+    private var viewModel: UserAccountViewModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -40,7 +40,7 @@ class UserAccountFragment : Fragment() {
         userLoginTextView?.text = login
 
         viewModel?.action?.observe(viewLifecycleOwner, Observer { action ->
-            when(action) {
+            when (action) {
                 is UserAccountFragmentAction.GoToTheNotePageAction -> openUserNotes()
             }
         })
@@ -53,10 +53,6 @@ class UserAccountFragment : Fragment() {
     }
 
     private fun openUserNotes() {
-        val fragment = NotesFragment()
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.fragment_main, fragment)
-            .addToBackStack(null)
-            .commit()
+        findNavController().navigate(R.id.action_userAccountFragment_to_notesFragment)
     }
 }

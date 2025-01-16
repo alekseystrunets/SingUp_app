@@ -10,11 +10,11 @@ class FirstActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_first)
 
-        if (savedInstanceState == null) {
-            val fragment = LoginFragment_Launch()
-            supportFragmentManager.beginTransaction()
-                .add(R.id.fragment_main, fragment)
-                .commit()
-        }
+//        if (savedInstanceState == null) {
+//            val fragment = LoginFragment_Launch()
+//            supportFragmentManager.beginTransaction()
+//                .add(R.id.fragment_main, fragment)
+//                .commit()
+//        }
         }
     }

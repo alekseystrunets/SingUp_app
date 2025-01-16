@@ -8,6 +8,7 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.singup_app.R
@@ -68,10 +69,6 @@ class NotesFragment : Fragment() {
     }
 
     private fun toNextScreen() {
-        val createNotesFragment = CreateNotesFragment()
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.fragment_main, createNotesFragment)
-            .addToBackStack(null) // Добавляем в back stack, чтобы можно было вернуться назад
-            .commit()
+        findNavController().navigate(R.id.action_notesFragment_to_createNotesFragment)
     }
 }

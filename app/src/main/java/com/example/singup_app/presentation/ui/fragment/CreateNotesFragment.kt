@@ -9,6 +9,7 @@ import androidx.appcompat.widget.AppCompatEditText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.singup_app.R
 import com.example.singup_app.presentation.ViewModels.CreateNoteFragmentViewModel
 import com.example.singup_app.presentation.action.CreateNoteFragmentAction
@@ -37,7 +38,7 @@ class CreateNotesFragment : Fragment() {
 
         // Обработчик нажатия кнопки "Create"
         createButton?.setOnClickListener {
-            showProgressAndCreateNote() // Показать прогресс-бар
+            showProgressAndCreateNote()
         }
 
         viewModel?.action?.observe(viewLifecycleOwner, Observer { action ->
@@ -56,20 +57,16 @@ class CreateNotesFragment : Fragment() {
     }
 
     private fun back() {
-        val notesFragment = NotesFragment()
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.fragment_main, notesFragment) // Переход на NotesFragment
-            .commit()
+        findNavController().navigate(R.id.action_createNotesFragment_to_prFragment)
     }
 
     private fun addNote() {
-        // Здесь можно добавить логику для добавления заметки, если нужно
+        // Логика добавления заметки (при необходимости)
     }
 
     private fun showProgressAndCreateNote() {
         // Создаем новый фрагмент для прогресса
         val progressFragment = PrFragment().apply {
-            // Передаем данные во фрагмент, даже если они пустые
             arguments = Bundle().apply {
                 putString("header", headerEditText?.text.toString())
                 putString("date", dateEditText?.text.toString())
@@ -77,10 +74,7 @@ class CreateNotesFragment : Fragment() {
             }
         }
 
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.fragment_main, progressFragment) // Отображаем PrFragment
-            .addToBackStack(null)
-            .commit()
+        findNavController().navigate(R.id.action_createNotesFragment_to_prFragment, progressFragment.arguments)
 
         // Уведомляем ViewModel о создании новой заметки
         viewModel?.processAction(CreateNoteFragmentAction.CreateNewNoteAction)
