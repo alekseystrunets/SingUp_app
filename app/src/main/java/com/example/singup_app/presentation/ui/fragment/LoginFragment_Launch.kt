@@ -78,7 +78,7 @@ class LoginFragment_Launch : Fragment() {
         fragment.arguments = bundle
 
         // Переход на UserAccountFragment
-        findNavController().navigate(R.id.action_loginFragment_Launch_to_userAccountFragment, bundle)
+        findNavController().navigate(R.id.action_loginFragment_Launch_to_animationFragment, bundle)
     }
 
     private fun isValidEmail(email: String): Boolean {

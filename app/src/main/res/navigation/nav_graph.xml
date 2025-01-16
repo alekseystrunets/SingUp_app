@@ -11,8 +11,8 @@
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
-            android:id="@+id/action_loginFragment_Launch_to_userAccountFragment"
-            app:destination="@id/userAccountFragment" />
+            android:id="@+id/action_loginFragment_Launch_to_animationFragment"
+            app:destination="@id/animationFragment" />
     </fragment>
     <fragment
         android:id="@+id/userAccountFragment"
@@ -49,5 +49,14 @@
         <action
             android:id="@+id/action_prFragment_to_notesFragment"
             app:destination="@id/notesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/animationFragment"
+        android:name="com.example.singup_app.presentation.ui.fragment.CombinedViewFragment"
+        tools:layout="@layout/fragment_animation"
+        android:label="AnimationFragment" >
+        <action
+            android:id="@+id/action_animationFragment_to_userAccountFragment"
+            app:destination="@id/userAccountFragment" />
     </fragment>
 </navigation>
