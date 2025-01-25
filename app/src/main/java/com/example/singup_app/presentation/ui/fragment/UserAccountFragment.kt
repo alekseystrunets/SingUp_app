@@ -5,10 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.singup_app.R
 import com.example.singup_app.presentation.ViewModels.UserAccountViewModel
@@ -16,37 +16,47 @@ import com.example.singup_app.presentation.action.UserAccountFragmentAction
 
 class UserAccountFragment : Fragment() {
 
-    private  var userEmailTextView: TextView? = null
-    private  var userLoginTextView: TextView? = null
-    private  var buttonToNotes: Button? = null
-    private var viewModel : UserAccountViewModel? = null
+    private lateinit var userEmailEditText: EditText
+    private lateinit var userLoginEditText: EditText
+    private lateinit var buttonToNotes: Button
+    private lateinit var viewModel: UserAccountViewModel
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View? {
         val currentView = inflater.inflate(R.layout.fragment_account_user, container, false)
 
-        userEmailTextView = currentView.findViewById(R.id.user_account_email1)
-        userLoginTextView = currentView.findViewById(R.id.user_account_login)
+        userEmailEditText = currentView.findViewById(R.id.user_account_email1)
+        userLoginEditText = currentView.findViewById(R.id.user_account_login)
         buttonToNotes = currentView.findViewById(R.id.button_to_notes)
 
         viewModel = ViewModelProvider(this).get(UserAccountViewModel::class.java)
 
+
+        viewModel.email.observe(viewLifecycleOwner, Observer {
+            userEmailEditText.setText(it)
+        })
+
+        viewModel.login.observe(viewLifecycleOwner, Observer {
+            userLoginEditText.setText(it)
+        })
+
         // Получаем данные из arguments
-        val email = arguments?.getString("email")
-        val login = arguments?.getString("login")
+        val email = arguments?.getString("email") ?: ""
+        val login = arguments?.getString("login") ?: ""
 
-        // Устанавливаем полученные данные в TextView
-        userEmailTextView?.text = email
-        userLoginTextView?.text = login
 
-        viewModel?.action?.observe(viewLifecycleOwner, Observer { action ->
-            when(action) {
+        viewModel.setEmail(email)
+        viewModel.setLogin(login)
+
+        viewModel.action.observe(viewLifecycleOwner, Observer { action ->
+            when (action) {
                 is UserAccountFragmentAction.GoToTheNotePageAction -> openUserNotes()
             }
         })
 
-        buttonToNotes?.setOnClickListener {
-            viewModel?.processAction(UserAccountFragmentAction.GoToTheNotePageAction)
+        buttonToNotes.setOnClickListener {
+            viewModel.processAction(UserAccountFragmentAction.GoToTheNotePageAction)
         }
 
         return currentView

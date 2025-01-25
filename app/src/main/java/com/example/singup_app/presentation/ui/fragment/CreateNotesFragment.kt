@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -16,12 +17,12 @@ import com.example.singup_app.presentation.action.NotesFragmentAction
 
 class CreateNotesFragment : Fragment() {
 
-    private var headerEditText: AppCompatEditText? = null
-    private var dateEditText: AppCompatEditText? = null
-    private var messageEditText: AppCompatEditText? = null
-    private var createButton: AppCompatButton? = null
-    private var exitButton: AppCompatButton? = null
-    private var viewModel: CreateNoteFragmentViewModel? = null
+    private lateinit var headerEditText: AppCompatEditText
+    private lateinit var dateEditText: AppCompatEditText
+    private lateinit var messageEditText: AppCompatEditText
+    private lateinit var createButton: AppCompatButton
+    private lateinit var exitButton: AppCompatButton
+    private lateinit var viewModel: CreateNoteFragmentViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -36,38 +37,62 @@ class CreateNotesFragment : Fragment() {
         createButton = currentView.findViewById(R.id.create)
         exitButton = currentView.findViewById(R.id.exit)
 
-        // Обработчик нажатия кнопки "Create"
-        createButton?.setOnClickListener {
-            viewModel?.processAction(CreateNoteFragmentAction.CreateNewNoteAction)
+        // Наблюдение за состоянием
+        viewModel.state.observe(viewLifecycleOwner, Observer { state ->
+            headerEditText.setText(state.header)
+            dateEditText.setText(state.date)
+            messageEditText.setText(state.message)
+        })
+
+        // Обработчики нажатий
+        createButton.setOnClickListener {
+            viewModel.processAction(CreateNoteFragmentAction.CreateNewNoteAction)
         }
-        viewModel?.action?.observe(viewLifecycleOwner, Observer { action ->
+
+        exitButton.setOnClickListener {
+            viewModel.processAction(CreateNoteFragmentAction.GoToBackAction)
+        }
+
+        // Обработка изменений в полях ввода
+        headerEditText.addTextChangedListener { text ->
+            viewModel.processAction(CreateNoteFragmentAction.UpdateHeader(text.toString()))
+        }
+
+        dateEditText.addTextChangedListener { text ->
+            viewModel.processAction(CreateNoteFragmentAction.UpdateDate(text.toString()))
+        }
+
+        messageEditText.addTextChangedListener { text ->
+            viewModel.processAction(CreateNoteFragmentAction.UpdateMessage(text.toString()))
+        }
+
+        // Наблюдение за действиями
+        viewModel.action.observe(viewLifecycleOwner, Observer { action ->
             when(action) {
                 is CreateNoteFragmentAction.GoToBackAction -> back()
                 CreateNoteFragmentAction.CreateNewNoteAction -> addNote()
+                is CreateNoteFragmentAction.UpdateDate -> TODO()
+                is CreateNoteFragmentAction.UpdateHeader -> TODO()
+                is CreateNoteFragmentAction.UpdateMessage -> TODO()
             }
         })
-        // Обработчик нажатия кнопки "Exit"
-        exitButton?.setOnClickListener {
-            viewModel?.processAction(CreateNoteFragmentAction.GoToBackAction)
-        }
 
         return currentView
     }
-    private fun back(){
+
+    private fun back() {
         parentFragmentManager.popBackStack()
     }
-    private fun addNote(){
-        val header = headerEditText?.text.toString()
-        val date = dateEditText?.text.toString()
-        val message = messageEditText?.text.toString()
 
+    private fun addNote() {
+        val currentState = viewModel.state.value ?: return
         // Проверка на пустые поля (опционально)
-        if (header.isNotEmpty() && date.isNotEmpty() && message.isNotEmpty()) {
+        if (currentState.header.isNotEmpty() && currentState.date.isNotEmpty() && currentState.message.isNotEmpty()) {
             // Передаем данные во фрагмент NotesFragment
             val noteBundle = Bundle().apply {
-                putString("header", header)
-                putString("date", date)
-                putString("message", message)
+                putString("header", currentState.header)
+                putString("date", currentState.date)
+                putString("message", currentState.message)
             }
 
             val notesFragment = NotesFragment()

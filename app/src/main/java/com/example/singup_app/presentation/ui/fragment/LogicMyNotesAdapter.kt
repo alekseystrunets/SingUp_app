@@ -13,7 +13,7 @@ import com.example.singup_app.R
 import com.example.singup_app.UserNotes
 
 class LogicMyNotesAdapter(
-    private val list: MutableList<UserNotes>,
+    private var list: List<UserNotes>, // Изменено на List, чтобы избежать изменения списка извне
     private val onDelete: (Int) -> Unit
 ) : RecyclerView.Adapter<LogicMyNotesAdapter.ViewHolder>() {
 
@@ -66,5 +66,11 @@ class LogicMyNotesAdapter(
             type = "text/plain"
         }
         context.startActivity(Intent.createChooser(shareIntent, "Поделитесь заметкой"))
+    }
+
+    // Метод для обновления списка заметок
+    fun updateNotes(newNotes: List<UserNotes>) {
+        list = newNotes
+        notifyDataSetChanged()
     }
 }
