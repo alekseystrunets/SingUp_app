@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import androidx.lifecycle.lifecycleScope
 import com.example.singup_app.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -14,7 +15,6 @@ import kotlinx.coroutines.launch
 
 class PrFragment : Fragment() {
     private val job = Job()
-    private val scope = CoroutineScope(Dispatchers.Main + job)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -25,7 +25,7 @@ class PrFragment : Fragment() {
         val progressBar = view.findViewById<ProgressBar>(R.id.progress_bar)
 
         // Запускаем корутину для задержки
-        scope.launch {
+        lifecycleScope.launch {
             simulateLoading()
         }
 
