@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".LoginFragment_Launch"
+    tools:context=".presentation.ui.fragment.LoginFragment_Launch"
     android:background="#1F1D1D">
     <TextView
         android:layout_width="wrap_content"
@@ -73,5 +73,14 @@
         android:textColor="#fdfdfd"
         android:textSize="18sp"
         android:text="Next" />
+
+    <com.example.singup_app.presentation.ui.activity.CustomView
+        app:customViewValue="0"
+        android:layout_marginTop="40dp"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:id="@+id/customView"
+        android:visibility="visible"/>
 
 </LinearLayout>

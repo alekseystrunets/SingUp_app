@@ -1,6 +1,7 @@
-package com.example.singup_app
+package com.example.singup_app.presentation.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.example.singup_app.R
+import com.example.singup_app.presentation.ui.activity.CustomView
 
 class LoginFragment_Launch : Fragment() {
 
@@ -15,6 +19,7 @@ class LoginFragment_Launch : Fragment() {
     private lateinit var userPass: EditText
     private lateinit var userLog: EditText
     private lateinit var buttonReg: Button
+    private var customView: CustomView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,6 +34,7 @@ class LoginFragment_Launch : Fragment() {
         userPass = view.findViewById(R.id.user_password)
         userLog = view.findViewById(R.id.user_login)
         buttonReg = view.findViewById(R.id.login_button)
+        customView = view.findViewById(R.id.customView)
 
         buttonReg.setOnClickListener {
             if (validateInputs()) {
@@ -44,18 +50,24 @@ class LoginFragment_Launch : Fragment() {
 
         return when {
             email.isEmpty() || login.isEmpty() || password.isEmpty() -> {
+                customView?.setCount(1) // Устанавливаем ошибку
                 showToast("Не все поля заполнены")
                 false
             }
             !isValidEmail(email) -> {
+                customView?.setCount(1) // Устанавливаем ошибку
                 showToast("Некорректный адрес электронной почты")
                 false
             }
             password.length < 8 -> {
+                customView?.setCount(1) // Устанавливаем ошибку
                 showToast("Пароль должен содержать не менее 8 символов")
                 false
             }
-            else -> true
+            else -> {
+                customView?.setCount(0) // Сбрасываем ошибку
+                true
+            }
         }
     }
 
@@ -76,10 +88,7 @@ class LoginFragment_Launch : Fragment() {
         fragment.arguments = bundle
 
         // Переход на UserAccountFragment
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.fragment_main, fragment)
-            .addToBackStack(null)
-            .commit()
+        findNavController().navigate(R.id.action_loginFragment_Launch_to_userAccountFragment, bundle)
     }
 
     private fun isValidEmail(email: String): Boolean {
