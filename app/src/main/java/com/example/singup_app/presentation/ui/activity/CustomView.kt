@@ -55,10 +55,6 @@ class CustomView(val myContext: Context, attrs: AttributeSet?) : View(myContext,
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        // Лог для проверки вызова onDraw
-        Log.d("CustomView", "onDraw called, count: $count")
-
-
         val rectLeft = 100f
         val rectTop = 100f
         val rectRight = 1000f
