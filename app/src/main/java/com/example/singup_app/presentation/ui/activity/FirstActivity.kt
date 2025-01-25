@@ -1,10 +1,9 @@
-package com.example.singup_app
+package com.example.singup_app.presentation.ui.activity
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import com.example.singup_app.presentation.ui.fragment.LoginFragment_Launch
+import com.example.singup_app.R
 
 class FirstActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

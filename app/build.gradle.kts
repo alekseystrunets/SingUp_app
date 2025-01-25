@@ -36,7 +36,8 @@ android {
 }
 
 dependencies {
-
+    implementation("io.insert-koin:koin-androidx-viewmodel:3.2.0")
+    implementation("io.insert-koin:koin-android:3.2.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

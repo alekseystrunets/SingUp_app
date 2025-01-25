@@ -1,4 +1,4 @@
-package com.example.singup_app
+package com.example.singup_app.presentation.ui.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +8,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.singup_app.R
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import com.example.singup_app.presentation.ViewModels.LoginFragmentViewModel
 
 class LoginFragment_Launch : Fragment() {
 
@@ -15,6 +18,7 @@ class LoginFragment_Launch : Fragment() {
     private lateinit var userPass: EditText
     private lateinit var userLog: EditText
     private lateinit var buttonReg: Button
+    private val viewModel : LoginFragmentViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,33 +35,37 @@ class LoginFragment_Launch : Fragment() {
         buttonReg = view.findViewById(R.id.login_button)
 
         buttonReg.setOnClickListener {
-            if (validateInputs()) {
-                openUserAccountFragment()
-            }
+          viewModel.state.observe(viewLifecycleOwner, {state ->
+              when{
+                  state.nextScreen -> openUserAccountFragment()
+                  state.errorMessage !=null -> Toast.makeText(requireContext(), state.errorMessage, Toast.LENGTH_SHORT).show()
+
+              }
+          })
         }
     }
 
-    private fun validateInputs(): Boolean {
-        val email = userEmail.text.toString().trim()
-        val password = userPass.text.toString().trim()
-        val login = userLog.text.toString().trim()
-
-        return when {
-            email.isEmpty() || login.isEmpty() || password.isEmpty() -> {
-                showToast("Не все поля заполнены")
-                false
-            }
-            !isValidEmail(email) -> {
-                showToast("Некорректный адрес электронной почты")
-                false
-            }
-            password.length < 8 -> {
-                showToast("Пароль должен содержать не менее 8 символов")
-                false
-            }
-            else -> true
-        }
-    }
+//    private fun validateInputs(): Boolean {
+//        val email = userEmail.text.toString().trim()
+//        val password = userPass.text.toString().trim()
+//        val login = userLog.text.toString().trim()
+//
+//        return when {
+//            email.isEmpty() || login.isEmpty() || password.isEmpty() -> {
+//                showToast("Не все поля заполнены")
+//                false
+//            }
+//            !isValidEmail(email) -> {
+//                showToast("Некорректный адрес электронной почты")
+//                false
+//            }
+//            password.length < 8 -> {
+//                showToast("Пароль должен содержать не менее 8 символов")
+//                false
+//            }
+//            else -> true
+//        }
+//    }
 
     private fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
