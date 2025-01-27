@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.singup_app.R
-import com.example.singup_app.UserNotes
+import com.example.singup_app.data.db_room.UserNotes
 import com.example.singup_app.presentation.ViewModels.NotesFragmentViewModel
 import com.example.singup_app.presentation.action.NotesFragmentAction
 
@@ -36,24 +36,28 @@ class NotesFragment : Fragment() {
             }
         })
 
-        // Обработчик нажатия кнопки "Add Note"
+
         addNoteButton?.setOnClickListener {
             viewModel?.processAction(NotesFragmentAction.GoToAddNotePageAction)
         }
 
-        // Получаем переданные данные (если есть)
         arguments?.let {
             val header = it.getString("header", "")
             val date = it.getString("date", "")
             val message = it.getString("message", "")
 
-            // Если данные были переданы, добавляем заметку в список
             if (header.isNotEmpty()) {
-                listOfNotesUsers.add(UserNotes(header, message, date))
+                val newNote = UserNotes(
+                    id = System.currentTimeMillis(),
+                    header = header,
+                    message = message,
+                    date = date
+                )
+                listOfNotesUsers.add(newNote)
             }
         }
 
-        // Настройка RecyclerView
+
         val recyclerView = currentView.findViewById<RecyclerView>(R.id.recycle_view)
         adapter = LogicMyNotesAdapter(listOfNotesUsers) { position -> deleteNoteAt(position) }
         recyclerView.adapter = adapter
@@ -71,7 +75,7 @@ class NotesFragment : Fragment() {
         val createNotesFragment = CreateNotesFragment()
         parentFragmentManager.beginTransaction()
             .replace(R.id.fragment_main, createNotesFragment)
-            .addToBackStack(null) // Добавляем в back stack, чтобы можно было вернуться назад
+            .addToBackStack(null)
             .commit()
     }
 }

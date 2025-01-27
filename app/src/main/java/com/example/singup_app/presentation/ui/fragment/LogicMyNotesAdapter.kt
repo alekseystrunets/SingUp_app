@@ -10,7 +10,7 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.singup_app.R
-import com.example.singup_app.UserNotes
+import com.example.singup_app.data.db_room.UserNotes
 
 class LogicMyNotesAdapter(
     private val list: MutableList<UserNotes>,
