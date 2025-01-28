@@ -11,5 +11,5 @@ data class UserNotes(
     val id: Long = 0,
    @ColumnInfo("header") val header: String,
     @ColumnInfo("message")val message: String,
-    val date: String
+    @ColumnInfo("date")val date: String
 )

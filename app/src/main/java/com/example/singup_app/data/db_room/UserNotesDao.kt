@@ -8,8 +8,8 @@ import androidx.room.Query
 @Dao
 interface UserNotesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(note: UserNotes)
+     fun insert(note: UserNotes)
 
-    @Query("SELECT * FROM user_notes ORDER BY id DESC")
-    suspend fun getAllNotes(): List<UserNotes>
+//    @Query("SELECT * FROM user_notes ORDER BY id DESC")
+//    suspend fun getAllNotes(): List<UserNotes>
 }
