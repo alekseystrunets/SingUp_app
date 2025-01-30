@@ -1,4 +1,4 @@
-package com.example.singup_app.presentation.view.fragment
+package com.example.singup_app
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,15 +8,15 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.singup_app.presentation.view.adapter.LogicMyNotesAdapter
-import com.example.singup_app.R
 import com.example.singup_app.data.UserNotes
+import com.example.singup_app.presentation.view.adapter.LogicMyNotesAdapter
+import com.example.singup_app.presentation.view.fragment.CreateNotesFragment
 
 class NotesFragment : Fragment() {
 
     private val listOfNotesUsers = mutableListOf<UserNotes>()
     private var adapter: LogicMyNotesAdapter? = null
-    private var addNoteButton: Button? = null
+    private lateinit var addNoteButton: Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -27,7 +27,7 @@ class NotesFragment : Fragment() {
         addNoteButton = currentView.findViewById(R.id.add_note_button)
 
         // Обработчик нажатия кнопки "Add Note"
-        addNoteButton?.setOnClickListener {
+        addNoteButton.setOnClickListener {
             val createNotesFragment = CreateNotesFragment()
 
             // Переход на CreateNotesFragment
@@ -36,7 +36,6 @@ class NotesFragment : Fragment() {
                 .addToBackStack(null) // Добавляем в back stack, чтобы можно было вернуться назад
                 .commit()
         }
-
         // Получаем переданные данные (если есть)
         arguments?.let {
             val header = it.getString("header", "")
@@ -44,8 +43,9 @@ class NotesFragment : Fragment() {
             val message = it.getString("message", "")
 
             // Если данные были переданы, добавляем заметку в список
-            if (header.isNotEmpty()) {
+            if (header.isNotEmpty() && message.isNotEmpty() && date.isNotEmpty()) {
                 listOfNotesUsers.add(UserNotes(header, message, date))
+                adapter?.notifyDataSetChanged()
             }
         }
 

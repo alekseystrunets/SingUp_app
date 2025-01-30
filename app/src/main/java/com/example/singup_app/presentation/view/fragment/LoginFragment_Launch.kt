@@ -41,10 +41,15 @@ class LoginFragment_Launch : Fragment() {
         userLog = view.findViewById(R.id.user_login)
         buttonReg = view.findViewById(R.id.login_button)
 
-        viewModel?.publicLiveData?.observe(viewLifecycleOwner) { action ->
-            when (action) {
-                is ViewLFLAction.ShowToast -> showToast(action.message)
-                is ViewLFLAction.ValidationSuccess -> openUserAccountFragment()
+        fun observeViewModel(){
+            viewModel?.publicLiveData?.observe(viewLifecycleOwner) { data ->
+                if (data != null){
+                    openUserAccountFragment(data)
+                }
+                else{
+                    showToast("Данные не были введены , или введены не верно")
+                }
+
             }
         }
 
@@ -52,7 +57,8 @@ class LoginFragment_Launch : Fragment() {
             val email = userEmail?.text.toString().trim()
             val password = userPass?.text.toString().trim()
             val login = userLog?.text.toString().trim()
-            viewModel?.validateInputs(email, login, password) // Передаем параметры для валидации
+            viewModel?.validateInputs(email,login,password)
+            observeViewModel()
         }
     }
 
@@ -60,14 +66,9 @@ class LoginFragment_Launch : Fragment() {
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
-    private fun openUserAccountFragment() {
+    private fun openUserAccountFragment(data : Bundle) {
         val fragment = UserAccountFragment()
-        val bundle = Bundle().apply {
-            putString("email", userEmail?.text.toString().trim())
-            putString("login", userLog?.text.toString().trim())
-        }
-        fragment.arguments = bundle
-
+        fragment.arguments = data
         parentFragmentManager.beginTransaction()
             .replace(R.id.fragment_main, fragment)
             .addToBackStack(null)
