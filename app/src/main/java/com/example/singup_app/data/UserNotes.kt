@@ -1,5 +1,5 @@
 
-package com.example.singup_app
+package com.example.singup_app.data
 
 data class UserNotes(
     val header: String,

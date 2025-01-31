@@ -1,4 +1,4 @@
-package com.example.singup_app
+package com.example.singup_app.presentation.view.adapter
 
 import android.content.Context
 import android.content.Intent
@@ -9,6 +9,8 @@ import android.widget.PopupMenu
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.singup_app.R
+import com.example.singup_app.data.UserNotes
 
 class LogicMyNotesAdapter(
     private val list: MutableList<UserNotes>,

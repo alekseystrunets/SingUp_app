@@ -8,6 +8,9 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.singup_app.data.UserNotes
+import com.example.singup_app.presentation.view.adapter.LogicMyNotesAdapter
+import com.example.singup_app.presentation.view.fragment.CreateNotesFragment
 
 class NotesFragment : Fragment() {
 
@@ -33,7 +36,6 @@ class NotesFragment : Fragment() {
                 .addToBackStack(null) // Добавляем в back stack, чтобы можно было вернуться назад
                 .commit()
         }
-
         // Получаем переданные данные (если есть)
         arguments?.let {
             val header = it.getString("header", "")
@@ -41,8 +43,9 @@ class NotesFragment : Fragment() {
             val message = it.getString("message", "")
 
             // Если данные были переданы, добавляем заметку в список
-            if (header.isNotEmpty()) {
+            if (header.isNotEmpty() && message.isNotEmpty() && date.isNotEmpty()) {
                 listOfNotesUsers.add(UserNotes(header, message, date))
+                adapter?.notifyDataSetChanged()
             }
         }
 

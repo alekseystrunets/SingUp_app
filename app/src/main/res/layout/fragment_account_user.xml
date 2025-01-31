@@ -5,7 +5,7 @@
     android:id="@+id/fragment_account_user"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UserAccountFragment"
+    tools:context=".presentation.view.fragment.UserAccountFragment"
     android:background="#1F1D1D"
     android:orientation="vertical"
     android:padding="16dp">
